@@ -1,5 +1,5 @@
-// use ordermap::OrderMap as HashMap;
-use std::collections::HashMap;
+use ordermap::OrderMap as HashMap;
+// use std::collections::HashMap;
 use std::env;
 use std::fs::File;
 use std::io::{self, BufRead};
