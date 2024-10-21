@@ -18,12 +18,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: setup | rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          default: true
-          profile: minimal
-
       - name: determine the new added project
         id: determine_project
         run: |
@@ -37,20 +31,23 @@ jobs:
           DIFF=$(git diff --name-status $MAIN_BRANCH)
 
           # Extract the names of new folders
-          NEW_FOLDERS=$(echo "$DIFF" | grep "^A" | awk '{print $2}' | grep 'Cargo.toml' | awk -F/ '{print $1}' | uniq)
-
-          # Print the new folder name
-          echo "New Project: $NEW_FOLDERS"
-
-          # Test if there is any new folder if not break the build
-          if [ -z "$NEW_FOLDERS" ]; then
-            echo "No new project found"
-            exit 1
+          if [[ -z "$(echo \"$DIFF\" | grep \"^A\" | awk '{print $2}' | grep 'Cargo.toml' | awk -F/ '{print $1}' | uniq)" ]]; then
+            echo "No new project found - skipping the build"
+            gh run cancel ${{ github.run_id }}
+            gh run watch ${{ github.run_id }}
           fi
+
+          NEW_FOLDERS=$(echo "$DIFF" | grep "^A" | awk '{print $2}' | grep 'Cargo.toml' | awk -F/ '{print $1}' | uniq)
 
           # Set the output variable
           echo "::set-output name=project::$NEW_FOLDERS"
-
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: setup | rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          default: true
+          profile: minimal
       - name: build
         run: cargo build --release
         working-directory: ${{ steps.determine_project.outputs.project }}
