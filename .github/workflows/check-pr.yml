@@ -31,24 +31,13 @@ jobs:
           DIFF=$(git diff --name-status $MAIN_BRANCH)
 
           # Extract the names of new folders
-          NEW_FOLDERS=$(echo "$DIFF" | grep "^A" | awk '{print $2}' | grep 'Cargo.toml')
-          if [[ -z "$NEW_FOLDERS" ]]; then
+          if [[ -z "$(echo \"$DIFF\" | grep \"^A\" | awk '{print $2}' | grep 'Cargo.toml' | awk -F/ '{print $1}' | uniq)" ]]; then
             echo "No new project found - skipping the build"
             gh run cancel ${{ github.run_id }}
             gh run watch ${{ github.run_id }}
           fi
 
-          NEW_FOLDERS=$(echo "$NEW_FOLDERS" | awk -F/ '{print $1}' | uniq)
-
-          # Print the new folder name
-          echo "New Project: $NEW_FOLDERS"
-
-          # Test if there no new folder, we exit but without breaking the build
-          if [[ -z "$NEW_FOLDERS" ]]; then
-            echo "No new project found - skipping the build"
-            gh run cancel ${{ github.run_id }}
-            gh run watch ${{ github.run_id }}
-          fi
+          NEW_FOLDERS=$(echo "$DIFF" | grep "^A" | awk '{print $2}' | grep 'Cargo.toml' | awk -F/ '{print $1}' | uniq)
 
           # Set the output variable
           echo "::set-output name=project::$NEW_FOLDERS"
