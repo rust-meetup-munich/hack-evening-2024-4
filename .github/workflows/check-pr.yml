@@ -42,14 +42,17 @@ jobs:
           # Print the new folder name
           echo "New Project: $NEW_FOLDERS"
 
-          # Test if there is any new folder if not break the build
+          # Test if there no new folder, we exit but without breaking the build
           if [ -z "$NEW_FOLDERS" ]; then
-            echo "No new project found"
-            exit 1
+            echo "No new project found - skipping the build"
+            gh run cancel ${{ github.run_id }}
+            gh run watch ${{ github.run_id }}
           fi
 
           # Set the output variable
           echo "::set-output name=project::$NEW_FOLDERS"
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: build
         run: cargo build --release
