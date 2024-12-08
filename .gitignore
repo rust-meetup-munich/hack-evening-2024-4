@@ -23,5 +23,6 @@ Cargo.lock
 results.csv
 results.md
 samples/weather_1B.csv
+samples/weather_1M.csv
 
 .DS_Store

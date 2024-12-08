@@ -28,7 +28,7 @@ for json_file in "$@"; do
   filename=$(basename "$json_file" .json)
 
   # Use jq to extract the mean value and append to the temporary file
-  jq -r --arg filename "$filename" '.results[] | [$filename, .mean] | @csv' "$json_file" | sed 's/,/;/g' >> "$temp_file"
+  jq -r --arg filename "$filename" '.results[] | [$filename, .mean, .stddev] | @csv' "$json_file" | sed 's/,/;/g' >> "$temp_file"
 done
 
 # Sort the temporary file by the second column (mean value) in descending order and save to final CSV
@@ -43,13 +43,14 @@ echo "Results have been saved to results.csv"
 {
   echo "# Leaderboard"
   echo ""
-  echo "| Rank | User     | Mean [s] |"
-  echo "|:------:|:----------|:----------|"
+  echo "| Rank | User     | Mean [s] | Stddev [s] |"
+  echo "|:------:|:----------|:----------|:---------|"
   awk -F';' '{
     rank = NR
     user = substr($1, 2, length($1) - 2) # Remove quotes
     mean = $2
-    printf "| %d | [![%s](https://github.com/%s.png?size=128) %s](https://github.com/%s) | %s |\n", rank, user, user, user, user, mean
+    stddev = $3
+    printf "| %d | [![%s](https://github.com/%s.png?size=128) %s](https://github.com/%s) | %s | ± %s |\n", rank, user, user, user, user, mean, stddev
   }' results.csv
 } > results.md
 

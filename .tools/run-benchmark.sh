@@ -9,8 +9,8 @@ NAME=$(basename $SOLUTION_FOLDER)
 
 # IMPORTANT: all folders below are relative to the solution folder as root folder!
 
-BENCHMARK_DATASET=../samples/weather_1B.csv
-RESULTS_FOLDER=../guide/src/20_leaderboard/results
+BENCHMARK_DATASET=../../samples/weather_1B.csv
+RESULTS_FOLDER=../../guide/src/20_leaderboard/results
 
 # check that the provided folder exists and is a cargo project
 if [ ! -d $SOLUTION_FOLDER ]; then
@@ -37,6 +37,8 @@ if [ $? -ne 0 ]; then
     echo "Failed to build the solution"
     exit 1
 fi
+
+echo "Running the solution $NAME on the benchmark dataset"
 
 hyperfine --warmup 0 --runs 5 \
     --export-json $RESULTS_FOLDER/$NAME.json \
