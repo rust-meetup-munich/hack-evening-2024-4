@@ -1,6 +1,6 @@
 # Billion Row Challenge <!-- omit in toc -->
 
-> This challenge is inspired by the initial [Java version](https://1brc.dev/), including the rules,
+> This challenge is inspired by the original [Java version](https://1brc.dev/), including the rules,
 > dataset and task. Thank you Gunnar Morling for coming up with the
 > [original idea](https://www.morling.dev/blog/one-billion-row-challenge/)!
 
@@ -15,11 +15,12 @@ are slight adaptations.
   - [Task Description](#task-description)
   - [Rules and Limitations](#rules-and-limitations)
 - [Project Particularities](#project-particularities)
+  - [Getting Started](#getting-started)
+  - [How To Submit](#how-to-submit)
   - [Helpful Commands](#helpful-commands)
-  - [Project Structure](#project-structure)
   - [Tips \& Tricks](#tips--tricks)
   - [Advanced Techniques](#advanced-techniques)
-- [Further Resources](#further-resources)
+- [Additional Resources](#additional-resources)
 
 ## Challenge
 
@@ -48,7 +49,15 @@ format that is expected varies slightly from language to language, but the follo
 the expected output for the first three stations:
 
 ```txt
-{Abha=5.0/18.0/27.4, Abidjan=15.7/26.0/34.1, Abéché=12.1/29.4/35.6, Accra=14.7/26.4/33.1, Addis Ababa=2.1/16.0/24.3, Adelaide=4.1/17.3/29.7, ...}
+{
+  Abha=5.0/18.0/27.4,
+  Abidjan=15.7/26.0/34.1,
+  Abéché=12.1/29.4/35.6,
+  Accra=14.7/26.4/33.1,
+  Addis Ababa=2.1/16.0/24.3,
+  Adelaide=4.1/17.3/29.7,
+  <...>
+}
 ```
 
 Oh, and this input.txt is different for each submission since it's generated on-demand. So no
@@ -67,8 +76,8 @@ hard-coding the results! 😉
 4. Input value ranges are as follows:
    - Station name: non null UTF-8 string of min length 1 character and max length 100 bytes (i.e.
      this could be 100 one-byte characters, or 50 two-byte characters, etc.)
-   - Temperature value: non null double between -99.9 (inclusive) and 99.9 (inclusive), always with
-     one fractional digit
+   - Temperature value: non-null double between -99.9 (inclusive) and 99.9 (inclusive), always with
+     exactly one fractional digit
 5. There is a maximum of 10,000 unique station names.
 6. Implementations must not rely on specifics of a given data set. Any valid station name as per the
    constraints above and any data distribution (number of measurements per station) must be
@@ -76,28 +85,54 @@ hard-coding the results! 😉
 
 ## Project Particularities
 
+### Getting Started
+
+> Note: running `export GITHUB_HANDLE=<your-github-handle>` should make these instructions easier.
+
+Please run the following commands:
+
+```sh
+git clone git@github.com:rust-meetup-munich/hack-evening-2024-4.git
+cd hack-evening-2024-4
+git checkout -b solution-$(GITHUB_HANDLE)
+cargo new solution-$(GITHUB_HANDLE)
+```
+
+The commands above will create a new git branch and initialize a new binary Rust project for your
+solution. It will have the following simple structure; we expect your solution to be implemented in
+the `main.rs` file.
+
+```text
+solution-your-handle/
+├── Cargo.lock
+├── Cargo.toml
+├── src
+│   └── main.rs
+```
+
+### How To Submit
+
+TODO(@sassman)
+
 ### Helpful Commands
 
-| Task                     | Command                                                                      |
-| ------------------------ | ---------------------------------------------------------------------------- |
-| generate 1B rows of data | `cargo run --bin data-generator --release -- --rows 1000000000`              |
-| run a debug build        | `cargo run           -- --input-file weather_1B.csv`                         |
-| run a release build      | `cargo run --release -- --input-file weather_1B.csv`                         |
-| run tests                | `cargo test`                                                                 |
-| run flamegraph           | `sudo cargo flamegraph --root --bin solution -- --input-file weather_1B.csv` |
-
-### Project Structure
-
-TODO
+| Task                     | Folder                    | Command                                          |
+| ------------------------ | ------------------------- | ------------------------------------------------ |
+| generate 1B rows of data | data-generator            | `cargo run --release -- --rows 1000000000`       |
+| run a debug build        | solution-$(GITHUB_HANDLE) | `cargo run           -- weather_1M.csv`          |
+| run a release build      | solution-$(GITHUB_HANDLE) | `cargo run --release -- weather_1B.csv`          |
+| run tests                | solution-$(GITHUB_HANDLE) | `cargo test`                                     |
+| run flamegraph           | solution-$(GITHUB_HANDLE) | `sudo cargo flamegraph --root -- weather_1B.csv` |
 
 ### Tips & Tricks
 
-- Go for a functionally correct, simple solution first and then iteratively improve parts.
+- This event is rather short, so we recommend going for a functionally correct, simple solution
+  first and then iteratively improve parts.
+- When developing, use debug builds and smaller datasets (e.g. 10M rows) to avoid long computation
+  times.
 - Keep your intermediate solutions by committing them, both for discussions and comparisons.
 - Use a profiler like [flamegraph](https://github.com/flamegraph-rs/flamegraph) to find out the
   actual bottlenecks in your program.
-- When developing, use debug builds and smaller datasets (e.g. 10M rows) to avoid long computation
-  times.
 
 ### Advanced Techniques
 
@@ -115,10 +150,11 @@ This section lists a few advanced techniques you may want to consider:
   - concurrent hashmaps like dash
   - SIMD instructions for parsing
 
-## Further Resources
+## Additional Resources
 
-TODO: Add links to Rust documentation, etc.
-
+- [Github project](https://github.com/rust-meetup-munich/hack-evening-2024-4)
+- [event description on meetup.com](https://www.meetup.com/rust-munich/events/304827279/)
+- [Rust standard documentation](https://doc.rust-lang.org/std/)
 - [original One Billion Challenge blog post](https://www.morling.dev/blog/one-billion-row-challenge/)
 - [One Billion Row Challenge website](https://1brc.dev/)
 - [flamegraph installation instructions](https://github.com/flamegraph-rs/flamegraph)
