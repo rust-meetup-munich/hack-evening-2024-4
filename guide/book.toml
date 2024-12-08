@@ -1,0 +1,6 @@
+[book]
+authors = ["Jonas Heinrich", "Ludwig Weinzierl", "Sven Kanoldt"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Rust Munich Meetup 2024/4 - Hacking Evening"

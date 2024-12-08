@@ -27,20 +27,17 @@ jobs:
           # Fetch the main branch
           git fetch origin $MAIN_BRANCH:$MAIN_BRANCH
 
-          # Get the latest commit diff or the diff between the current branch and the main branch
-          DIFF=$(git diff --name-status $MAIN_BRANCH)
+          NEW_FOLDER=$(git diff --name-status $MAIN_BRANCH | grep -E '^[AM]' | awk '{print $2}' | grep 'Cargo.toml' | awk -F/ '{print $1}' | uniq)
 
           # Extract the names of new folders
-          if [[ -z "$(echo \"$DIFF\" | grep \"^A\" | awk '{print $2}' | grep 'Cargo.toml' | awk -F/ '{print $1}' | uniq)" ]]; then
+          if [[ -z "$NEW_FOLDER" ]]; then
             echo "No new project found - skipping the build"
             gh run cancel ${{ github.run_id }}
             gh run watch ${{ github.run_id }}
           fi
 
-          NEW_FOLDERS=$(echo "$DIFF" | grep "^A" | awk '{print $2}' | grep 'Cargo.toml' | awk -F/ '{print $1}' | uniq)
-
           # Set the output variable
-          echo "::set-output name=project::$NEW_FOLDERS"
+          echo "PROJECT_FOLDER=$NEW_FOLDER" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ github.token }}
       - name: setup | rust
@@ -50,18 +47,18 @@ jobs:
           profile: minimal
       - name: build
         run: cargo build --release
-        working-directory: ${{ steps.determine_project.outputs.project }}
+        working-directory: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}
 
       - name: test
-        run: cargo run --release -- ../samples/input-small.csv > results-small.txt
-        working-directory: ${{ steps.determine_project.outputs.project }}
+        run: cargo run --release -- ../samples/weather_100.csv > X
+        working-directory: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}
 
       - name: diff results
         run: |
           # Check if the results are correct
-          diff -w results-small.txt ../samples/expected-results-small.txt
+          diff -w X ../samples/expected/weather_100.txt
 
-        working-directory: ${{ steps.determine_project.outputs.project }}
+        working-directory: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}
 
       - name: setup | hyperfine
         uses: taiki-e/install-action@v2
@@ -71,15 +68,15 @@ jobs:
       - name: benchmark
         run: |
           hyperfine --warmup 5 --export-markdown benchmark.md \
-            'cargo run --release -- ../samples/input-small.csv' \
-            'cargo run --release -- ../samples/input-medium.csv' \
-            'cargo run --release -- ../samples/input-large.csv'
-        working-directory: ${{ steps.determine_project.outputs.project }}
+            'cargo run --release -- ../samples/weather_100.csv' \
+            'cargo run --release -- ../samples/weather_1K.csv' \
+            'cargo run --release -- ../samples/weather_100K.csv'
+        working-directory: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}
 
       - name: post comment
         run: |
           # Read the test results
-          RESULTS=$(cat ${{ steps.determine_project.outputs.project }}/benchmark.md)
+          RESULTS=$(cat ${{ steps.determine_project.outputs.PROJECT_FOLDER }}/benchmark.md)
 
           # Print the results
           echo "Results: $RESULTS"
