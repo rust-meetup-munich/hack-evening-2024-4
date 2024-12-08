@@ -49,7 +49,7 @@ echo "Results have been saved to results.csv"
     rank = NR
     user = substr($1, 2, length($1) - 2) # Remove quotes
     mean = $2
-    printf "| %d | ![%s](https://github.com/%s.png?size=128) %s | %s |\n", rank, user, user, user, mean
+    printf "| %d | [![%s](https://github.com/%s.png?size=128) %s](https://github.com/%s) | %s |\n", rank, user, user, user, user, mean
   }' results.csv
 } > results.md
 
