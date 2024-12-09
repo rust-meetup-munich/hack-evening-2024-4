@@ -18,6 +18,6 @@ The output should be written to stdout.
 
 Please note that CI will run on your pull request to ensure that your solution compiles and runs correctly.
 
-:NOTE: If you have any questions, feel free to ask in the `#hack-evening-2024-4` channel on the Rust Munich Discord server.
+:NOTE: If you have any questions, feel free to ask in the [`#hack-evening-2024-4` channel on the Rust Munich Discord server](https://discord.com/channels/704612189532586014/1315802468868817007).
 
 Good luck! 🦀
