@@ -19,7 +19,8 @@ are slight adaptations.
   - [How To Submit](#how-to-submit)
   - [Helpful Commands](#helpful-commands)
   - [Tips \& Tricks](#tips--tricks)
-  - [Advanced Techniques](#advanced-techniques)
+- [Advanced Techniques](#advanced-techniques)
+- [Setup Issues?](#setup-issues)
 - [Additional Resources](#additional-resources)
 
 ## Challenge
@@ -135,7 +136,7 @@ TODO(@sassman)
 - Use a profiler like [flamegraph](https://github.com/flamegraph-rs/flamegraph) to find out the
   actual bottlenecks in your program.
 
-### Advanced Techniques
+## Advanced Techniques
 
 This section lists a few advanced techniques you may want to consider:
 
@@ -150,6 +151,14 @@ This section lists a few advanced techniques you may want to consider:
   - buffered I/O
   - memory mapped files
   - asynchronous I/O with io_uring
+
+## Setup Issues?
+
+In case you have setup issues and cannot program locally, we prepared a Rust playground template
+to give you a chance to still develop an algorithmic idea and dip your toe into Rust 🦀. Proper I/O,
+large input data and extensive benchmarking are not possible, so a proper submission will be tricky.
+
+[Rust playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=d039ad90338c5d71533c7e19e7c1012e)
 
 ## Additional Resources
 
