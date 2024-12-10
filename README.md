@@ -95,7 +95,7 @@ Please run the following commands:
 git clone git@github.com:rust-meetup-munich/hack-evening-2024-4.git
 cd hack-evening-2024-4
 git checkout -b solutions/${GITHUB_HANDLE}
-cargo new solution-$(GITHUB_HANDLE)
+cargo new solutions/${GITHUB_HANDLE}
 ```
 
 The commands above will create a new git branch and initialize a new binary Rust project for your
