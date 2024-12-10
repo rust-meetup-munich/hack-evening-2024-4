@@ -69,6 +69,7 @@ hard-coding the results! 😉
 
 1. You may use external libraries (like optimized data structures, parsers, etc.) with the exception
    of libraries that can solve the full challenge by themselves (e.g. polars, embedded DuckDB, etc.)
+   _This rule deviates from the original challenge due to the short duration of the event._
 2. Implementations must implemented in main.rs/utils.rs only. Try to keep it relatively short; don't
    copy-paste a forbidden library into your solution as a cheat.
 3. The computation must happen at application runtime; you cannot process the measurements file at
@@ -119,10 +120,10 @@ TODO(@sassman)
 | Task                     | Folder                    | Command                                          |
 | ------------------------ | ------------------------- | ------------------------------------------------ |
 | generate 1B rows of data | data-generator            | `cargo run --release -- --rows 1000000000`       |
-| run a debug build        | solution-$(GITHUB_HANDLE) | `cargo run           -- weather_1M.csv`          |
-| run a release build      | solution-$(GITHUB_HANDLE) | `cargo run --release -- weather_1B.csv`          |
-| run tests                | solution-$(GITHUB_HANDLE) | `cargo test`                                     |
-| run flamegraph           | solution-$(GITHUB_HANDLE) | `sudo cargo flamegraph --root -- weather_1B.csv` |
+| run a debug build        | solution-${GITHUB_HANDLE} | `cargo run           -- weather_1M.csv`          |
+| run a release build      | solution-${GITHUB_HANDLE} | `cargo run --release -- weather_1B.csv`          |
+| run tests                | solution-${GITHUB_HANDLE} | `cargo test`                                     |
+| run flamegraph           | solution-${GITHUB_HANDLE} | `sudo cargo flamegraph --root -- weather_1B.csv` |
 
 ### Tips & Tricks
 
@@ -138,10 +139,6 @@ TODO(@sassman)
 
 This section lists a few advanced techniques you may want to consider:
 
-- I/O techniques
-  - buffered I/O
-  - memory mapped files
-  - asynchronous I/O with io_uring
 - use preallocations and avoid additional ones
 - implement specialized float parsing
 - custom hash functions
@@ -149,6 +146,10 @@ This section lists a few advanced techniques you may want to consider:
   - reading the file with multiple threads in parallel
   - concurrent hashmaps like dash
   - SIMD instructions for parsing
+- I/O techniques
+  - buffered I/O
+  - memory mapped files
+  - asynchronous I/O with io_uring
 
 ## Additional Resources
 
