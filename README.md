@@ -94,7 +94,7 @@ Please run the following commands:
 ```sh
 git clone git@github.com:rust-meetup-munich/hack-evening-2024-4.git
 cd hack-evening-2024-4
-git checkout -b solution-$(GITHUB_HANDLE)
+git checkout -b solutions/${GITHUB_HANDLE}
 cargo new solution-$(GITHUB_HANDLE)
 ```
 
