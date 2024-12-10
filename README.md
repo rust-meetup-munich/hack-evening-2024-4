@@ -103,7 +103,7 @@ solution. It will have the following simple structure; we expect your solution t
 the `main.rs` file.
 
 ```text
-solution-your-handle/
+solutions/your-handle/
 ├── Cargo.lock
 ├── Cargo.toml
 ├── src
