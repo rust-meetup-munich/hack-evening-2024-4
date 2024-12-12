@@ -1,5 +1,6 @@
 use csv::ReaderBuilder;
 use serde::Deserialize;
+use std::collections::BTreeMap;
 use std::env;
 
 #[derive(Debug, Deserialize)]
@@ -17,8 +18,14 @@ fn main() {
         .from_path(file)
         .unwrap();
     let results: Vec<Record> = csv_reader.deserialize().map(|r| r.unwrap()).collect();
-    for result in results {
-        let record: Record = result;
-        println!("{:?}", record);
-    }
+
+    let grouped_results: BTreeMap<String, Vec<f32>> =
+        results.into_iter().fold(BTreeMap::new(), |mut acc, a| {
+            acc.entry(a.station.clone())
+                .or_default()
+                .push(a.temperature);
+            acc
+        });
+
+    println!("{grouped_results:?}");
 }
