@@ -1,0 +1,10 @@
+[package]
+name = "hovinen"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[dev-dependencies]
+googletest = "0.11.0"
+tempfile = "3.14.0"
