@@ -29,7 +29,7 @@ fn main() {
 
     println!("{}", '{');
     let n = keys.len();
-    let mut c = 0_u32;
+    let mut c = 0_usize;
 
     for key in keys {
         let item = map.get(key).unwrap();
@@ -37,6 +37,8 @@ fn main() {
 
         c += 1;
         if c != n {
+            println!("    {},", summary);
+        } else {
             println!("    {}", summary);
         }
     }
