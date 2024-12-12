@@ -30,8 +30,14 @@ fn main() {
     result.sort_by(|a, b| a.name.cmp(&b.name));
 
     println!("{{");
-    for station in &result { station.print(); }
-    println!("}}");
+    for (i, station) in result.iter().enumerate() {
+        if i == result.len() - 1 {
+            station.print(true);
+        } else {
+            station.print(false);
+        }
+    }
+    print!("}}");
 }
 
 
@@ -72,7 +78,11 @@ impl Station {
     //     Adelaide=4.1/17.3/29.7,
     //     <...>
     //   }
-    pub fn print(&self) {
-        println!("{}={:.1}/{:.1}/{:.1},", self.name, self.min, self.mean, self.max);
+    pub fn print(&self, last: bool) {
+        if last {
+            println!("    {}={:.1}/{:.1}/{:.1}", self.name, self.min, self.mean, self.max);
+        } else {
+            println!("    {}={:.1}/{:.1}/{:.1},", self.name, self.min, self.mean, self.max);
+        }
     }
 }
