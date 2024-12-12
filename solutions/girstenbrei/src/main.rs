@@ -70,8 +70,14 @@ fn main() {
     output.sort_by(|a, b| a.0.cmp(&b.0));
 
     println!("{{");
-    for (name, min, mean, max) in output {
-        println!("    {name}={:.01}/{:.01}/{:.01},", min, mean, max);
+    let len = output.len();
+    for (i, (name, min, mean, max)) in output.into_iter().enumerate() {
+        if i == len - 1 {
+            println!("    {name}={:.01}/{:.01}/{:.01}", min, mean, max);
+        } else {
+            println!("    {name}={:.01}/{:.01}/{:.01},", min, mean, max);
+        }
+
     }
     print!("}}");
 }
