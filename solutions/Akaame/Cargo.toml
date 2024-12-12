@@ -1,0 +1,8 @@
+[package]
+name = "Akaame"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# The clap crate is a command-line argument parser for Rust.
+clap = { version = "4", features = ["derive"] }
