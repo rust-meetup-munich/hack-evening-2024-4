@@ -6,7 +6,7 @@ use std::env;
 #[derive(Debug, Deserialize)]
 struct Record {
     station: String,
-    temperature: f32,
+    temperature: f64,
 }
 
 fn main() {
@@ -19,7 +19,7 @@ fn main() {
         .unwrap();
     let results: Vec<Record> = csv_reader.deserialize().map(|r| r.unwrap()).collect();
 
-    let grouped_results: BTreeMap<String, Vec<f32>> =
+    let grouped_results: BTreeMap<String, Vec<f64>> =
         results.into_iter().fold(BTreeMap::new(), |mut acc, a| {
             acc.entry(a.station.clone())
                 .or_default()
@@ -27,7 +27,7 @@ fn main() {
             acc
         });
 
-    let mut final_data: Vec<(String, f32, f32, f32)> = grouped_results
+    let mut final_data: Vec<(String, f64, f64, f64)> = grouped_results
         .iter()
         .map(|(k, v)| {
             (
@@ -36,7 +36,7 @@ fn main() {
                     .cloned()
                     .min_by(|a, b| a.partial_cmp(b).unwrap())
                     .unwrap(),
-                v.iter().cloned().sum::<f32>() / v.len() as f32,
+                v.iter().cloned().sum::<f64>() / v.len() as f64,
                 v.iter()
                     .cloned()
                     .max_by(|a, b| a.partial_cmp(b).unwrap())
