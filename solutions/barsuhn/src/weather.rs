@@ -31,6 +31,6 @@ impl Weather {
         let max = self.max.unwrap_or(0.0);
         let mean = self.sum / (self.count as f64);
 
-        format!("{}={:?}/{:?}/{:?}", name, min, mean, max)
+        format!("{}={:.1}/{:.1}/{:.1}", name, min, mean, max)
     }
 }
