@@ -8,7 +8,7 @@ use std::{
 fn main() {
     let args = std::env::args().collect::<Vec<_>>();
     let result = process_file(&Path::new(&args.get(1).expect("Require a filename")));
-    output(&result);
+    output(std::io::stdout(), &result);
 }
 
 fn process_file(path: &Path) -> Vec<(String, f64, f64, f64)> {
@@ -40,21 +40,26 @@ fn process_file(path: &Path) -> Vec<(String, f64, f64, f64)> {
     results
 }
 
-fn output(lines: &[(String, f64, f64, f64)]) {
-    println!("{{");
-    for (city, min, mean, max) in lines[0..lines.len() - 1].iter() {
-        println!("    {city}={min:0.1}/{mean:0.1}/{max:0.1},");
+fn output(mut writer: impl std::io::Write, lines: &[(String, f64, f64, f64)]) {
+    writeln!(writer, "{{").unwrap();
+    for (ref city, min, mean, max) in lines[0..lines.len() - 1].iter() {
+        writeln!(writer, "    {city}={min:0.1}/{mean:0.1}/{max:0.1},").unwrap();
     }
     let (ref city, min, mean, max) = lines[lines.len() - 1];
-    println!("    {city}={min:0.1}/{mean:0.1}/{max:0.1}");
-    print!("}}");
+    writeln!(writer, "    {city}={min:0.1}/{mean:0.1}/{max:0.1}").unwrap();
+    write!(writer, "}}").unwrap();
 }
 
 #[cfg(test)]
 mod tests {
-    use super::process_file;
+    use super::{output, process_file};
+    use core::str;
     use googletest::prelude::*;
-    use std::io::Write;
+    use std::{
+        fs::read_to_string,
+        io::{BufWriter, Write},
+        path::Path,
+    };
 
     #[test]
     fn outputs_mean_max_min_of_singleton() -> Result<()> {
@@ -147,6 +152,18 @@ mod tests {
                 (eq("D"), anything(), anything(), anything()),
             ]
         )
+    }
+
+    #[test]
+    fn output_matches_sample() -> Result<()> {
+        let mut writer = BufWriter::new(Vec::new());
+
+        let result = process_file(Path::new("../../samples/weather_100.csv"));
+        output(&mut writer, &result);
+
+        let expected = read_to_string("../../samples/expected/weather_100.txt").unwrap();
+        let actual = String::from_utf8(writer.into_inner().unwrap()).unwrap();
+        verify_that!(actual, eq(expected))
     }
 
     fn write_content(content: &str) -> tempfile::NamedTempFile {
