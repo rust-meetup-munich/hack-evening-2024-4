@@ -69,7 +69,7 @@ fn main() {
 
     println!("{{");
     for (city, (min, avg, max)) in temp_data.iter() {
-        println!("  {}={:.1}/{:.1}/{:.1},", city, min, avg, max);
+        println!("    {}={:.1}/{:.1}/{:.1},", city, min, avg, max);
     }
     println!("}}");
 
