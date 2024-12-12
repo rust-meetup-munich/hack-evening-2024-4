@@ -13,7 +13,8 @@ concurrency:
 
 jobs:
   flamegraph:
-    name: test
+    if: ${{ github.event.label.name == 'flamegraph' }}
+    name: flamegraph
     runs-on:
       group: Benchmark
     timeout-minutes: 8
