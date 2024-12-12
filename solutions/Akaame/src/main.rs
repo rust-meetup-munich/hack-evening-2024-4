@@ -81,14 +81,20 @@ fn solution_bulk(input_file: String) {
     }
 
     // Print the solution
-    println!("{{\n");
-    for (key, stats) in solution.iter_mut() {
+    println!("{{");
+    let mut iterable = solution.iter_mut().peekable();
+    while let Some(mut iter) = iterable.next() {
+        let key = iter.0;
+        let stats = iter.1;
         stats.sort_by(|a, b| a.partial_cmp(b).unwrap());
         let length = stats.len();
         // Calculate the mean
         let sum: f64 = stats.iter().sum();
         let mean = sum / length as f64;
-        let line = format!("\t{}={:.1}/{:.1}/{:.1},", key, stats[0], mean, stats[length-1]);
+        let mut line = format!("\t{}={:.1}/{:.1}/{:.1}", key, stats[0], mean, stats[length-1]);
+        if iterable.peek().is_some() {
+            line += ",";
+        }
         println!("{}", line);
     }
     println!("}}");
