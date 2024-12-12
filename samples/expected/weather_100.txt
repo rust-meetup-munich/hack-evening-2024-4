@@ -66,7 +66,7 @@
     Rabat=20.0/20.0/20.0,
     Rangpur=40.7/40.7/40.7,
     Rome=14.8/14.8/14.8,
-    San Salvador=24.2/24.2/24.2,
+    San Salvador=24.2/26.4/28.5,
     Sapporo=4.9/4.9/4.9,
     Sarajevo=11.5/11.5/11.5,
     Saskatoon=1.5/1.5/1.5,
