@@ -46,10 +46,18 @@ fn main() {
         .collect();
     final_data.sort_by(|a, b| a.0.cmp(&b.0));
 
+    let mut i = 1;
+    let len = final_data.len();
     println!("{{");
     for data_point in final_data {
         let (station, min, mean, max) = data_point;
-        println!("    {station}={min:.1}/{mean:.1}/{max:.1},");
+        print!("    {station}={min:.1}/{mean:.1}/{max:.1}");
+        if i < len {
+            println!(",");
+        } else {
+            println!("");
+        }
+        i += 1;
     }
     println!("}}");
 }
