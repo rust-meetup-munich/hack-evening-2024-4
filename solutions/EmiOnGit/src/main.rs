@@ -37,7 +37,7 @@ fn main() {
         .into_iter()
         .map(|(id, value)| {
             format!(
-                "{id}={:1}/{:1}/{},",
+                "{id}={:.1}/{:.1}/{},",
                 value.min,
                 // TODO do we round up?
                 (value.mean * 10.).round() / 10.,
