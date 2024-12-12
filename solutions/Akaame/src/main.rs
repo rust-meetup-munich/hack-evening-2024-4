@@ -54,8 +54,8 @@ fn solution_dummy(input_file: String) {
     // Print the solution
     println!("{{\n");
     for (key, stats) in solution.iter() {
-        let line = format!("\t{}={:.1}/{:.1}/{:.1}", key, stats.min, stats.mean, stats.max);
+        let line = format!("\t{}={:.1}/{:.1}/{:.1},", key, stats.min, stats.mean, stats.max);
         println!("{}", line);
     }
-    println!("}}\n");
+    println!("}}");
 }
