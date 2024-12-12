@@ -13,22 +13,31 @@ fn main() {
 
 fn process_file(path: &Path) -> Vec<(String, f64, f64, f64)> {
     let file = File::open(path).expect("Cannot open file");
-    let reader = BufReader::new(file);
+    let mut reader = BufReader::new(file);
     let mut cities = HashMap::<String, _>::new();
-    for (line_number, line) in reader.lines().enumerate() {
-        let line = match line {
-            Ok(line) => line,
-            Err(err) => {
-                panic!("Error parsing line {line_number}: {err}")
-            }
+    let mut line_buffer = Vec::with_capacity(80);
+    while let Ok(count) = reader.read_until('\n' as u8, &mut line_buffer) {
+        if count == 0 {
+            break;
+        }
+        let len = if line_buffer[count - 1] == '\n' as u8 {
+            count - 1
+        } else {
+            count
         };
-        let mut line_split = line.split(";");
-        let city = line_split.next().expect("City should be present");
-        let measurement = line_split
-            .next()
-            .expect("Measurement should be present")
-            .parse::<f64>()
-            .expect("Valid measurement");
+        let Some((separator_index, _)) = line_buffer
+            .iter()
+            .enumerate()
+            .find(|(_, c)| **c == ';' as u8)
+        else {
+            panic!("Invalid line");
+        };
+        let city = unsafe { std::str::from_utf8_unchecked(&line_buffer[..separator_index]) };
+        let measurement_str =
+            unsafe { std::str::from_utf8_unchecked(&line_buffer[separator_index + 1..len]) };
+        let Ok(measurement) = measurement_str.parse::<f64>() else {
+            panic!("Could not parse {:?}", measurement_str.as_bytes());
+        };
         if let Some((min, max, sum, count)) = cities.get_mut(city) {
             *min = f64::min(*min, measurement);
             *max = f64::max(*max, measurement);
@@ -37,6 +46,7 @@ fn process_file(path: &Path) -> Vec<(String, f64, f64, f64)> {
         } else {
             cities.insert(city.to_string(), (measurement, measurement, measurement, 1));
         }
+        line_buffer.clear();
     }
     let mut results = cities
         .into_iter()
