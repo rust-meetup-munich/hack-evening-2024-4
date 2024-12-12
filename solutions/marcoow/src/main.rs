@@ -49,7 +49,7 @@ fn main() {
     println!("{{");
     for data_point in final_data {
         let (station, min, mean, max) = data_point;
-        println!("    {station}={min}/{mean:.1}/{max}");
+        println!("    {station}={min:.1}/{mean:.1}/{max:.1},");
     }
     println!("}}");
 }
