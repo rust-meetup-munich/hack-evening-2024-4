@@ -118,9 +118,9 @@ solutions/your-handle/
 
 ### Helpful Commands
 
-| Task                     | Folder                    | Command                                          |
-| ------------------------ | ------------------------- | ------------------------------------------------ |
-| generate 1B rows of data | data-generator            | `cargo run --release -- --rows 1000000000`       |
+| Task                     | Folder                     | Command                                          |
+| ------------------------ | -------------------------- | ------------------------------------------------ |
+| generate 1B rows of data | data-generator             | `cargo run --release -- --rows 1000000000`       |
 | run a debug build        | solutions/${GITHUB_HANDLE} | `cargo run           -- weather_1M.csv`          |
 | run a release build      | solutions/${GITHUB_HANDLE} | `cargo run --release -- weather_1B.csv`          |
 | run tests                | solutions/${GITHUB_HANDLE} | `cargo test`                                     |
