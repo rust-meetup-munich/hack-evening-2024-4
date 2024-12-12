@@ -25,7 +25,7 @@ fn process_file(path: &Path) -> Vec<(String, f64, f64, f64)> {
         let parts = line.split(";").collect::<Vec<_>>();
         let entry = cities
             .entry(parts[0].to_string())
-            .or_insert_with(|| (f64::INFINITY, 0.0, 0.0, 0));
+            .or_insert_with(|| (f64::INFINITY, f64::NEG_INFINITY, 0.0, 0));
         let measurement = parts[1].parse::<f64>().expect("Valid measurement");
         entry.0 = f64::min(entry.0, measurement);
         entry.1 = f64::max(entry.1, measurement);
@@ -42,10 +42,12 @@ fn process_file(path: &Path) -> Vec<(String, f64, f64, f64)> {
 
 fn output(lines: &[(String, f64, f64, f64)]) {
     println!("{{");
-    for (city, min, mean, max) in lines {
-        println!("    {city}={min}/{mean}/{max},");
+    for (city, min, mean, max) in lines[0..lines.len() - 1].iter() {
+        println!("    {city}={min:0.1}/{mean:0.1}/{max:0.1},");
     }
-    println!("}}");
+    let (ref city, min, mean, max) = lines[lines.len() - 1];
+    println!("    {city}={min:0.1}/{mean:0.1}/{max:0.1}");
+    print!("}}");
 }
 
 #[cfg(test)]
@@ -67,6 +69,23 @@ mod tests {
                 approx_eq(12.3),
                 approx_eq(12.3),
                 approx_eq(12.3),
+            )]
+        )
+    }
+
+    #[test]
+    fn outputs_correct_data_with_negative_singleton() -> Result<()> {
+        let tempfile = write_content("Arbitrary city;-12.3");
+
+        let result = process_file(tempfile.path());
+
+        verify_that!(
+            result,
+            unordered_elements_are![(
+                eq("Arbitrary city"),
+                approx_eq(-12.3),
+                approx_eq(-12.3),
+                approx_eq(-12.3),
             )]
         )
     }
