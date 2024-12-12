@@ -66,7 +66,7 @@ fn main() {
         if i == result.len() - 1 {
             writeln!(
                 &mut buffer,
-                "    {key}={:.2}/{:.2}/{:.2}",
+                "    {key}={:.1}/{:.1}/{:.1}",
                 stats.min, stats.avg, stats.max
             )
             .expect("Error writing to buffer");
