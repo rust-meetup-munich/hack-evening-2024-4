@@ -29,15 +29,16 @@ fn main() {
     let mut result = weather_stations.iter().fold(Vec::new(), |mut acc, (k, v)| { acc.push(Station::new(k, v.clone())); acc });
     result.sort_by(|a, b| a.name.cmp(&b.name));
 
-    println!("{{");
+    let mut str_output: String = String::from("{\n");
     for (i, station) in result.iter().enumerate() {
         if i == result.len() - 1 {
-            station.print(true);
+            str_output.push_str(&format!("    {}={:.1}/{:.1}/{:.1}\n", station.name, station.min, station.mean, station.max));
         } else {
-            station.print(false);
+            str_output.push_str(&format!("    {}={:.1}/{:.1}/{:.1},\n", station.name, station.min, station.mean, station.max));
         }
     }
-    print!("}}");
+    str_output.push_str("}");
+    print!("{}", str_output);
 }
 
 

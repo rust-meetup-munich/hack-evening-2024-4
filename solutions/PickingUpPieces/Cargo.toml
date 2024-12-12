@@ -9,3 +9,6 @@ edition = "2021"
 clap = { version = "4.4.14", features = ["derive"] }
 env_logger = "0.11.5"
 log = "0.4.22"
+
+[profile.release]
+debug = true
