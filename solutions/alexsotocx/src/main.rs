@@ -43,7 +43,6 @@ fn read_file(file_path: &str) -> Result<Vec<(String, Stats)>, std::io::Error> {
 
     let mut output: Vec<(String, Stats)> = vec![];
     for (key, value) in map.iter_mut() {
-        value.sort_by(|a, b| a.partial_cmp(b).unwrap());
         let stats = calculate_stats(value);
         output.push((key.clone(), stats));
     }
