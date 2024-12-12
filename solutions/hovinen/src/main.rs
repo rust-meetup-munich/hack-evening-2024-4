@@ -6,9 +6,8 @@ use std::{
 };
 
 fn main() {
-    let result = process_file(&Path::new(
-        &std::env::args().next().expect("Require a filename"),
-    ));
+    let args = std::env::args().collect::<Vec<_>>();
+    let result = process_file(&Path::new(&args.get(1).expect("Require a filename")));
     output(&result);
 }
 
@@ -33,16 +32,20 @@ fn process_file(path: &Path) -> Vec<(String, f64, f64, f64)> {
         entry.2 += measurement;
         entry.3 += 1;
     }
-    cities
+    let mut results = cities
         .into_iter()
         .map(|(city, (min, max, sum, count))| (city.to_string(), min, sum / count as f64, max))
-        .collect()
+        .collect::<Vec<_>>();
+    results.sort_by(|(v1, _, _, _), (v2, _, _, _)| v1.cmp(v2));
+    results
 }
 
 fn output(lines: &[(String, f64, f64, f64)]) {
+    println!("{{");
     for (city, min, mean, max) in lines {
-        println!("{city}={min}/{mean}/{max}");
+        println!("    {city}={min}/{mean}/{max},");
     }
+    println!("}}");
 }
 
 #[cfg(test)]
@@ -106,6 +109,23 @@ mod tests {
                     approx_eq(45.6),
                     approx_eq(45.6),
                 )
+            ]
+        )
+    }
+
+    #[test]
+    fn outputs_are_sorted_alphabetically() -> Result<()> {
+        let tempfile = write_content("C;1\nB;2\nA;3\nD;5");
+
+        let result = process_file(tempfile.path());
+
+        verify_that!(
+            result,
+            elements_are![
+                (eq("A"), anything(), anything(), anything()),
+                (eq("B"), anything(), anything(), anything()),
+                (eq("C"), anything(), anything(), anything()),
+                (eq("D"), anything(), anything(), anything()),
             ]
         )
     }
