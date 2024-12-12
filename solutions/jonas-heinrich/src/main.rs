@@ -134,7 +134,7 @@ fn main() -> io::Result<()> {
     for key in global.keys() {
         keys.push(key);
     }
-    keys.sort();
+    keys.sort_unstable();
 
     let mut results = String::with_capacity(10 * 1024);
     results.push_str("{\n    ");
