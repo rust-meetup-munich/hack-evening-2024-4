@@ -43,10 +43,10 @@ fn read_file(file_path: &str) -> Result<(), std::io::Error> {
 
 
     
-    let mut result: Vec<(String, &Stats)> = vec![];
+    let mut result: Vec<(&String, &Stats)> = vec![];
     for (key, value) in map.iter_mut() {
         value.avg = value.avg / value.count as f64;
-        result.push((key.clone(), value));
+        result.push((key, value));
     }
 
     result.sort_unstable_by(|a, b| a.0.partial_cmp(&b.0).unwrap());
@@ -83,7 +83,5 @@ fn read_file(file_path: &str) -> Result<(), std::io::Error> {
 fn main() {
     let args: Vec<String> = env::args().collect();
     let file_path = args.get(1).expect("File path not provided");
-    let result = read_file(file_path).expect(" Error reading file");
-
-    
+    read_file(file_path).expect(" Error reading file");
 }
