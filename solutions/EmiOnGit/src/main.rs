@@ -40,14 +40,14 @@ fn main() {
                 "{id}={:.1}/{:.1}/{:.1},",
                 value.min,
                 // TODO do we round up?
-                (value.mean * 10.).round() / 10.,
+                value.mean,
                 value.max
             )
         })
         .collect();
     expected.sort();
     let expected_str = expected.join("\n");
-    let result = "{\n".to_string() + &expected_str + "\n}";
+    let result = "{\n".to_string() + &expected_str + ",\n}";
     println!("{result}");
 }
 struct Node {
