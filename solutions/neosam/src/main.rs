@@ -161,7 +161,7 @@ impl DataStore {
         data.sort_by(|data1, data2| data1.location.cmp(&data2.location));
         for (statistic_data, i) in data.iter().zip(0usize..) {
             print!(
-                "   {}={:.1}/{:.1}/{:.1}",
+                "    {}={:.1}/{:.1}/{:.1}",
                 String::from_utf8_lossy(statistic_data.location.as_ref()),
                 statistic_data.min,
                 statistic_data.max,
