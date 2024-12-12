@@ -53,7 +53,7 @@ fn read_file(file_path: &str) -> Result<(), std::io::Error> {
 
     result.sort_unstable_by(|a, b| a.0.partial_cmp(&b.0).unwrap());
 
-    let mut buffer = BufWriter::new(Vec::new());
+    let mut buffer = stdout();
     writeln!(&mut buffer, "{{").expect("Error writing to buffer");
     for (i, v) in result.iter().enumerate() {
         let (key, stats) = v;
@@ -76,8 +76,6 @@ fn read_file(file_path: &str) -> Result<(), std::io::Error> {
     }
     writeln!(&mut buffer, "}}").expect("Error writing to buffer");
     
-    let output = buffer.into_inner().unwrap();
-    stdout().write_all(&output).unwrap();
 
     Ok(())
 }
