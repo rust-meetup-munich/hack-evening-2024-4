@@ -69,7 +69,12 @@ fn main() {
 
     println!("{{");
     for (city, (min, avg, max)) in temp_data.iter() {
-        println!("    {}={:.1}/{:.1}/{:.1},", city, min, avg, max);
+        // if last element, don't print the comma
+        if city == temp_data.keys().last().unwrap() {
+            println!("    {}={:.1}/{:.1}/{:.1}", city, min, avg, max);
+        } else {
+            println!("    {}={:.1}/{:.1}/{:.1},", city, min, avg, max);
+        }
     }
     println!("}}");
 
