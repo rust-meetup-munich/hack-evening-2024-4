@@ -26,6 +26,8 @@ fn read_file(file_path: &str) -> Result<(), std::io::Error> {
     let reader = BufReader::new(File::open(file_path)?);
     let lines = reader.lines();
 
+    let fn_insert = || Stats::new();
+
     let mut map: HashMap<String, Stats> = HashMap::new();
     for line in lines {
         let content = line?;
@@ -33,7 +35,7 @@ fn read_file(file_path: &str) -> Result<(), std::io::Error> {
         let key = l[0].clone();
         let value = l[1].parse::<f64>().unwrap();
 
-        let s = map.entry(key).or_insert(Stats::new());
+        let s = map.entry(key).or_insert_with(fn_insert);
 
         s.avg += value;
         s.count += 1;
