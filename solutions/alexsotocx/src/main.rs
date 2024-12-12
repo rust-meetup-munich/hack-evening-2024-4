@@ -2,60 +2,54 @@ use std::collections::HashMap;
 use std::env;
 use std::fs::File;
 use std::io::{stdout, BufRead, BufReader, BufWriter, Write};
+
+#[derive(Debug, Clone)]
 struct Stats {
     avg: f64,
     max: f64,
     min: f64,
+    count: i32
 }
 
-fn calculate_stats(values: &Vec<f64>) -> Stats {
-    let n = values.len();
-    let mut sum: f64 = 0.0;
-    let mut max: f64 = -6000000.0;
-    let mut min: f64 = 6000000.0;
-    for i in 0..n {
-        sum += values[i];
-        if values[i] > max {
-            max = values[i];
-        }
-        if values[i] < min {
-            min = values[i];
+impl Stats {
+    fn new() -> Self {
+        Stats {
+            avg: 0.0,
+            max: -6000000.0,
+            min: 6000000.0,
+            count: 0
         }
     }
-
-    let avg = sum / n as f64;
-
-    Stats { avg, max, min }
 }
 
-fn read_file(file_path: &str) -> Result<Vec<(String, Stats)>, std::io::Error> {
+fn read_file(file_path: &str) -> Result<(), std::io::Error> {
     let reader = BufReader::new(File::open(file_path)?);
     let lines = reader.lines();
 
-    let mut map: HashMap<String, Vec<f64>> = HashMap::new();
+    let mut map: HashMap<String, Stats> = HashMap::new();
     for line in lines {
-        let content = line?.clone();
+        let content = line?;
         let l: Vec<String> = content.split(';').map(|s| s.to_string()).collect();
-        map.entry(l[0].clone())
-            .or_insert(Vec::new())
-            .push(l[1].parse().unwrap());
+        let key = l[0].clone();
+        let value = l[1].parse::<f64>().unwrap();
+
+        let s = map.entry(key).or_insert(Stats::new());
+
+        s.avg += value;
+        s.count += 1;
+        s.max = s.max.max(value);
+        s.min = s.min.min(value);
     }
 
-    let mut output: Vec<(String, Stats)> = vec![];
+
+    
+    let mut result: Vec<(String, &Stats)> = vec![];
     for (key, value) in map.iter_mut() {
-        let stats = calculate_stats(value);
-        output.push((key.clone(), stats));
+        value.avg = value.avg / value.count as f64;
+        result.push((key.clone(), value));
     }
 
-    output.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap());
-
-    Ok(output)
-}
-
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    let file_path = args.get(1).expect("File path not provided");
-    let result = read_file(file_path).expect(" Error reading file");
+    result.sort_unstable_by(|a, b| a.0.partial_cmp(&b.0).unwrap());
 
     let mut buffer = BufWriter::new(Vec::new());
     writeln!(&mut buffer, "{{").expect("Error writing to buffer");
@@ -82,4 +76,14 @@ fn main() {
     
     let output = buffer.into_inner().unwrap();
     stdout().write_all(&output).unwrap();
+
+    Ok(())
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let file_path = args.get(1).expect("File path not provided");
+    let result = read_file(file_path).expect(" Error reading file");
+
+    
 }
