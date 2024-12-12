@@ -19,13 +19,11 @@ fn main() {
             line.clear();
             continue;
         };
-        println!("split {temperatur}");
         // whitespaces might make the parsing fail so we split it off
         let Ok(temperatur) = temperatur.split_whitespace().next().unwrap().parse() else {
             line.clear();
             continue;
         };
-        println!("push run");
         if let Some(v) = map.get_mut(id) {
             v.push(temperatur);
         } else {
@@ -47,8 +45,8 @@ fn main() {
         .collect();
     expected.sort();
     let expected_str = expected.join("\n");
-    println!("{expected_str}");
-    println!("finished");
+    let result = "{\n".to_string() + &expected_str + "\n}";
+    println!("{result}");
 }
 struct Node {
     // pub id: String,
