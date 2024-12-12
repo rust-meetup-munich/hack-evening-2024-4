@@ -55,7 +55,7 @@ fn main() {
         if i < len {
             println!(",");
         } else {
-            println!("");
+            println!();
         }
         i += 1;
     }
