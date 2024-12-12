@@ -1,7 +1,7 @@
 use std::{
     collections::HashMap,
     fs::File,
-    io::{BufRead, BufReader},
+    io::{BufRead, BufReader, Write},
     path::Path,
 };
 
@@ -14,7 +14,7 @@ fn main() {
 fn process_file(path: &Path) -> Vec<(String, f64, f64, f64)> {
     let file = File::open(path).expect("Cannot open file");
     let reader = BufReader::new(file);
-    let mut cities = HashMap::new();
+    let mut cities = HashMap::<String, _>::new();
     for (line_number, line) in reader.lines().enumerate() {
         let line = match line {
             Ok(line) => line,
@@ -22,15 +22,21 @@ fn process_file(path: &Path) -> Vec<(String, f64, f64, f64)> {
                 panic!("Error parsing line {line_number}: {err}")
             }
         };
-        let parts = line.split(";").collect::<Vec<_>>();
-        let entry = cities
-            .entry(parts[0].to_string())
-            .or_insert_with(|| (f64::INFINITY, f64::NEG_INFINITY, 0.0, 0));
-        let measurement = parts[1].parse::<f64>().expect("Valid measurement");
-        entry.0 = f64::min(entry.0, measurement);
-        entry.1 = f64::max(entry.1, measurement);
-        entry.2 += measurement;
-        entry.3 += 1;
+        let mut line_split = line.split(";");
+        let city = line_split.next().expect("City should be present");
+        let measurement = line_split
+            .next()
+            .expect("Measurement should be present")
+            .parse::<f64>()
+            .expect("Valid measurement");
+        if let Some((min, max, sum, count)) = cities.get_mut(city) {
+            *min = f64::min(*min, measurement);
+            *max = f64::max(*max, measurement);
+            *sum += measurement;
+            *count += 1;
+        } else {
+            cities.insert(city.to_string(), (measurement, measurement, measurement, 1));
+        }
     }
     let mut results = cities
         .into_iter()
@@ -40,7 +46,7 @@ fn process_file(path: &Path) -> Vec<(String, f64, f64, f64)> {
     results
 }
 
-fn output(mut writer: impl std::io::Write, lines: &[(String, f64, f64, f64)]) {
+fn output(mut writer: impl Write, lines: &[(String, f64, f64, f64)]) {
     writeln!(writer, "{{").unwrap();
     for (ref city, min, mean, max) in lines[0..lines.len() - 1].iter() {
         writeln!(writer, "    {city}={min:0.1}/{mean:0.1}/{max:0.1},").unwrap();
