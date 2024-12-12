@@ -1,18 +1,18 @@
 use std::collections::HashMap;
 use std::env;
 use std::fs::File;
-use std::io::{BufRead, BufReader, BufWriter, Write};
+use std::io::{stdout, BufRead, BufReader, BufWriter, Write};
 struct Stats {
-    avg: f32,
-    max: f32,
-    min: f32,
+    avg: f64,
+    max: f64,
+    min: f64,
 }
 
-fn calculate_stats(values: &Vec<f32>) -> Stats {
+fn calculate_stats(values: &Vec<f64>) -> Stats {
     let n = values.len();
-    let mut sum = 0.0;
-    let mut max = -6000000.0;
-    let mut min = 6000000.0;
+    let mut sum: f64 = 0.0;
+    let mut max: f64 = -6000000.0;
+    let mut min: f64 = 6000000.0;
     for i in 0..n {
         sum += values[i];
         if values[i] > max {
@@ -23,7 +23,7 @@ fn calculate_stats(values: &Vec<f32>) -> Stats {
         }
     }
 
-    let avg = sum / n as f32;
+    let avg = sum / n as f64;
 
     Stats { avg, max, min }
 }
@@ -32,7 +32,7 @@ fn read_file(file_path: &str) -> Result<Vec<(String, Stats)>, std::io::Error> {
     let reader = BufReader::new(File::open(file_path)?);
     let lines = reader.lines();
 
-    let mut map: HashMap<String, Vec<f32>> = HashMap::new();
+    let mut map: HashMap<String, Vec<f64>> = HashMap::new();
     for line in lines {
         let content = line?.clone();
         let l: Vec<String> = content.split(';').map(|s| s.to_string()).collect();
@@ -79,7 +79,7 @@ fn main() {
         }
     }
     writeln!(&mut buffer, "}}").expect("Error writing to buffer");
-
-    let output = String::from_utf8(buffer.into_inner().unwrap()).unwrap();
-    println!("{}", output);    
+    
+    let output = buffer.into_inner().unwrap();
+    stdout().write_all(&output).unwrap();
 }
