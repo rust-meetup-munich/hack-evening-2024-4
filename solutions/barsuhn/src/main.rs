@@ -13,8 +13,6 @@ mod weather;
 fn main() {
     let args = Args::parse();
 
-    println!("Input: {}", args.filename);
-
     let map = match read_weather(&args.filename) {
         Ok(map) => map,
         Err(e) => {
