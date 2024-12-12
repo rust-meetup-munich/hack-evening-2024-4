@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Rust Munich Meetup 2024/4 - Hacking Evening</title>
-        <meta name="robots" content="noindex">
+        <title>Feedback - Rust Munich Meetup 2024/4 - Hacking Evening</title>
 
 
         <!-- Custom HTML head -->
@@ -153,82 +152,22 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="agenda-and-timeline"><a class="header" href="#agenda-and-timeline">Agenda and Timeline</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>TODO: essence of the global README.md goes here</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="learning-opportunities"><a class="header" href="#learning-opportunities">Learning Opportunities</a></h1>
-<p>Some things are more like side quests, others are important to get a reasonale speed.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="learning-opportunities-1"><a class="header" href="#learning-opportunities-1">Learning Opportunities</a></h1>
-<h2 id="cli"><a class="header" href="#cli">CLI</a></h2>
-<p>There are a few rust libraries available to create a CLI for your solution. This is a great opportunity to learn how to use them. Here we want to suggest two libraries, <code>clap</code> and <code>argh</code>.</p>
-<h3 id="clap"><a class="header" href="#clap">Clap</a></h3>
-<p>You could use <a href="https://docs.rs/clap/latest/clap/">clap</a> - A full-featured, fast Command Line Argument Parser for Rust, to create a CLI for your solution.</p>
-<p>:Note: clap has a sort of a declarative syntax, which works with rust proc macros. It's very well documented in form of examples, and reduces the boilerplate code you have to write for parsing command line arguments. This is very useful to explore if you are new to clap. Besides you can still use the procedural API if you prefer.</p>
-<h3 id="alternative-argh"><a class="header" href="#alternative-argh">Alternative Argh</a></h3>
-<p>There is different library called <a href="https://crates.io/crates/argh">Argh</a> that comes with a declarative syntax for defining command line arguments. It's a bit less feature-rich than clap, yet it's powerful and easy to use.</p>
-<h2 id="ideas-for-your-cli"><a class="header" href="#ideas-for-your-cli">Ideas for your CLI</a></h2>
-<p>Here are some optional ideas for CLI options you could implement:</p>
-<ul>
-<li>support a <code>--help</code> flag to print a help message</li>
-<li>support multiple input files at once (e.g. <code>file1.csv file2.csv file3.csv</code>)</li>
-<li>support different output formats, e.g. JSON, CSV, etc. (e.g. <code>--output-format json</code>)</li>
-<li>support different output destinations, e.g. file (e.g. <code>--output-file output.csv</code>)</li>
-<li>support different output verbosity levels (e.g. <code>--verbose</code>, <code>--debug</code>, etc.)</li>
-<li>support different error handling strategies (e.g. <code>--ignore-errors</code>, <code>--fail-fast</code>, etc.)</li>
-<li>show a nice progress bar while processing the input files</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="learning-opportunities-2"><a class="header" href="#learning-opportunities-2">Learning Opportunities</a></h1>
-<h2 id="threading"><a class="header" href="#threading">Threading</a></h2>
-<p>Rust has a powerful threading model that allows you to write concurrent code safely. This is a great opportunity to learn how to use it. Here we want to suggest the crate <code>rayon</code> that will likely lead you down a path where you will learn about <code>std::sync::Arc</code>, <code>std::sync::RwLock</code> and <code>std::sync::mpsc::channel</code> and a likes.</p>
-<p>rayon is a data parallelism library for Rust. It is a simple and efficient library that allows you to write parallel code that is easy to read and understand. It is a great way to get started with parallel programming in Rust.</p>
-<p>Please note that parallelism of IO is a tricky, so you might seek help of channels to communicate between threads.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="learning-opportunities-3"><a class="header" href="#learning-opportunities-3">Learning Opportunities</a></h1>
-<h2 id="some-ideas"><a class="header" href="#some-ideas">Some Ideas</a></h2>
-<ul>
-<li>buffered IO</li>
-<li>io_uring for async IO</li>
-<li>no string usage and use byte slices instead</li>
-<li>SIMD float parsing</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="submission"><a class="header" href="#submission">Submission</a></h1>
-<p>To submit your solution, please create a fork of this repository and submit a pull request to the <code>main</code> branch. Your pull request should include the following:</p>
-<ul>
-<li>A new directory in the <code>solutions</code> directory named after your GitHub username.</li>
-<li>This should contain a binary rust project with your solution.</li>
-<li>The binary should accept a single argument, that is the file path to the input file.</li>
-</ul>
-<p>For example, if your GitHub username is <code>sassman</code>, your solution should be in <code>solutions/sassman</code>.
-It should be callable like this:</p>
-<pre><code class="language-sh">cd solutions/sassman
-cargo run --release -- ../../samples/weather_100.csv
-</code></pre>
-<p>The output should be written to stdout.</p>
-<p>Please note that CI will run on your pull request to ensure that your solution compiles and runs correctly.</p>
-<p>:NOTE: If you have any questions, feel free to ask in the <a href="https://discord.com/channels/704612189532586014/1315802468868817007"><code>#hack-evening-2024-4</code> channel on the Rust Munich Discord server</a>.</p>
-<p>Good luck! 🦀</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h1>
-<ul>
-<li>We will share the leaderboard results on Discord in the next day</li>
-<li>Please use discord to share your solution with others</li>
-<li>Next event date and time announcement</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="we-need-your-feedback"><a class="header" href="#we-need-your-feedback">We need your Feedback!</a></h1>
+                        <h1 id="we-need-your-feedback"><a class="header" href="#we-need-your-feedback">We need your Feedback!</a></h1>
 <p>Help us to improve the Rust Munich Meetup by providing your feedback. Scan the QR code or click the link below to fill out the feedback form.</p>
 <p><img src="./qrcode_feedback.png" alt="qrcode" /></p>
 <p><a href="https://t1p.de/vs7x4">Feedback Form</a></p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="leaderboard"><a class="header" href="#leaderboard">Leaderboard</a></h1>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Rank</th><th style="text-align: left">User</th><th style="text-align: left">Mean [s]</th><th style="text-align: left">Stddev [s]</th></tr></thead><tbody>
-<tr><td style="text-align: center">1</td><td style="text-align: left"><a href="https://github.com/sassman2"><img src="https://github.com/sassman2.png?size=128" alt="sassman2" /> sassman2</a></td><td style="text-align: left">111.45265133102001</td><td style="text-align: left">± 0.44280481264153293</td></tr>
-<tr><td style="text-align: center">2</td><td style="text-align: left"><a href="https://github.com/weinzierl"><img src="https://github.com/weinzierl.png?size=128" alt="weinzierl" /> weinzierl</a></td><td style="text-align: left">111.88275374361999</td><td style="text-align: left">± 1.5316605606659666</td></tr>
-<tr><td style="text-align: center">3</td><td style="text-align: left"><a href="https://github.com/sassman"><img src="https://github.com/sassman.png?size=128" alt="sassman" /> sassman</a></td><td style="text-align: left">116.88199371345999</td><td style="text-align: left">± 0.5528076257889486</td></tr>
-<tr><td style="text-align: center">4</td><td style="text-align: left"><a href="https://github.com/Jonas-Heinrich"><img src="https://github.com/Jonas-Heinrich.png?size=128" alt="Jonas-Heinrich" /> Jonas-Heinrich</a></td><td style="text-align: left">116.88275374361999</td><td style="text-align: left">± 1.5316605606659666</td></tr>
-</tbody></table>
-</div>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="03_end.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
+                            <a rel="next prefetch" href="20_leaderboard/SUMMARY.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -236,7 +175,13 @@ cargo run --release -- ../../samples/weather_100.csv
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="03_end.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
+                    <a rel="next prefetch" href="20_leaderboard/SUMMARY.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -259,11 +204,6 @@ cargo run --release -- ../../samples/weather_100.csv
 
         <!-- Custom JS scripts -->
 
-        <script>
-        window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
-        });
-        </script>
 
     </div>
     </body>
