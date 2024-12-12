@@ -9,14 +9,6 @@ struct Record {
     temperature: f32,
 }
 
-#[derive(Debug)]
-struct FinalRecord {
-    station: String,
-    min: f32,
-    mean: f32,
-    max: f32,
-}
-
 fn main() {
     let file = env::args().nth(1).expect("Input file must be specified!");
 
@@ -35,24 +27,29 @@ fn main() {
             acc
         });
 
-    let mut final_data: Vec<FinalRecord> = grouped_results
+    let mut final_data: Vec<(String, f32, f32, f32)> = grouped_results
         .iter()
-        .map(|(k, v)| FinalRecord {
-            station: k.clone(),
-            min: v
-                .iter()
-                .cloned()
-                .min_by(|a, b| a.partial_cmp(b).unwrap())
-                .unwrap(),
-            mean: v.iter().cloned().sum::<f32>() / v.len() as f32,
-            max: v
-                .iter()
-                .cloned()
-                .max_by(|a, b| a.partial_cmp(b).unwrap())
-                .unwrap(),
+        .map(|(k, v)| {
+            (
+                k.clone(),
+                v.iter()
+                    .cloned()
+                    .min_by(|a, b| a.partial_cmp(b).unwrap())
+                    .unwrap(),
+                v.iter().cloned().sum::<f32>() / v.len() as f32,
+                v.iter()
+                    .cloned()
+                    .max_by(|a, b| a.partial_cmp(b).unwrap())
+                    .unwrap(),
+            )
         })
         .collect();
-    final_data.sort_by(|a, b| a.station.cmp(&b.station));
+    final_data.sort_by(|a, b| a.0.cmp(&b.0));
 
-    println!("{final_data:?}");
+    println!("{{");
+    for data_point in final_data {
+        let (station, min, mean, max) = data_point;
+        println!("    {station}={min}/{mean:.1}/{max}");
+    }
+    println!("}}");
 }
