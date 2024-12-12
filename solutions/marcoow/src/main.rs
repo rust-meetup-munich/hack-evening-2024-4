@@ -1,13 +1,6 @@
 use csv::ReaderBuilder;
-use serde::Deserialize;
 use std::collections::BTreeMap;
 use std::env;
-
-#[derive(Debug, Deserialize)]
-struct Record {
-    station: String,
-    temperature: f64,
-}
 
 fn main() {
     let file = env::args().nth(1).expect("Input file must be specified!");
@@ -17,13 +10,13 @@ fn main() {
         .has_headers(false)
         .from_path(file)
         .unwrap();
-    let results: Vec<Record> = csv_reader.deserialize().map(|r| r.unwrap()).collect();
+    let results = csv_reader.records().map(|r| r.unwrap());
 
     let grouped_results: BTreeMap<String, Vec<f64>> =
         results.into_iter().fold(BTreeMap::new(), |mut acc, a| {
-            acc.entry(a.station.clone())
+            acc.entry(String::from(a.get(0).unwrap()))
                 .or_default()
-                .push(a.temperature);
+                .push(str::parse::<f64>(a.get(1).unwrap()).unwrap());
             acc
         });
 
