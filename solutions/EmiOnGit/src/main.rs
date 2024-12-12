@@ -35,7 +35,15 @@ fn main() {
     }
     let mut expected: Vec<String> = map
         .into_iter()
-        .map(|(id, value)| format!("{id}={}/{}/{},", value.min, value.max, value.mean))
+        .map(|(id, value)| {
+            format!(
+                "{id}={:1}/{:1}/{},",
+                value.min,
+                // TODO do we round up?
+                (value.mean * 10.).round() / 10.,
+                value.max
+            )
+        })
         .collect();
     expected.sort();
     let expected_str = expected.join("\n");
@@ -44,13 +52,13 @@ fn main() {
 }
 struct Node {
     // pub id: String,
-    pub max: f32,
-    pub min: f32,
-    pub mean: f32,
+    pub max: f64,
+    pub min: f64,
+    pub mean: f64,
     pub count: usize,
 }
 impl Node {
-    pub fn new(id: String, first_temp: f32) -> Node {
+    pub fn new(id: String, first_temp: f64) -> Node {
         Node {
             // id,
             max: first_temp,
@@ -59,11 +67,11 @@ impl Node {
             count: 1,
         }
     }
-    pub fn push(&mut self, temp: f32) {
+    pub fn push(&mut self, temp: f64) {
         self.max = self.max.max(temp);
         self.min = self.min.min(temp);
         self.count = self.count + 1;
-        let p = 1. / self.count as f32;
+        let p = 1. / self.count as f64;
         self.mean = self.mean * (1. - p) + temp * p;
     }
 }
