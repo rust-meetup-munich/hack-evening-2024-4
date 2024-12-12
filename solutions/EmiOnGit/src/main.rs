@@ -2,8 +2,10 @@ use std::{collections::HashMap, env, io::BufRead};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let file_name = args.get(1).cloned().unwrap_or("weather_100.csv".into());
-    let file_path = "../../samples/".to_string() + &file_name;
+    let file_path = args
+        .get(1)
+        .cloned()
+        .unwrap_or("../../samples/weather_100.csv".into());
     let Ok(input_file) = std::fs::File::open(file_path.clone()) else {
         panic!("Could not read {file_path}");
     };
