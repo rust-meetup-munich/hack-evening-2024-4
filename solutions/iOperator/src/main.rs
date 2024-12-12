@@ -28,12 +28,12 @@ fn main() {
         let line = line.unwrap();
         let mut split = line.split(';');
         let mycity = split.next().unwrap().to_string();
-        let mytemp = split.next().unwrap().parse::<f32>().unwrap();
+        let mytemp = split.next().unwrap().parse::<f64>().unwrap();
 
         // Check if the city is already in the map
         // if it is, add the temperature to the vector
         // if it is not, create a new vector with the temperature
-        let entry: &mut Vec<f32> = map.entry(mycity).or_insert(vec![]);
+        let entry: &mut Vec<f64> = map.entry(mycity).or_insert(vec![]);
         entry.push(mytemp);
     }
 
@@ -46,8 +46,8 @@ fn main() {
 
     // Calculate the minimum, maximum and average temperature for each city
     for (city, temperatures) in map.iter() {
-        let mut min = f32::MAX;
-        let mut max = f32::MIN;
+        let mut min = f64::MAX;
+        let mut max = f64::MIN;
         let mut sum = 0.0;
 
         for temp in temperatures.iter() {
@@ -60,7 +60,7 @@ fn main() {
             sum += *temp;
         }
 
-        let avg = sum / temperatures.len() as f32;
+        let avg = sum / temperatures.len() as f64;
 
         // println!("{}: min: {}, max: {}, avg: {}", city, min, max, avg);
 
