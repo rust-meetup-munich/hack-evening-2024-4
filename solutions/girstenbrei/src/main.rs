@@ -1,5 +1,5 @@
 use core::f64;
-use std::{collections::HashMap, fs::File, io::{BufRead, BufReader}};
+use std::{collections::BTreeMap, fs::File, io::{BufRead, BufReader}};
 
 
 
@@ -32,7 +32,7 @@ fn main() {
     let buf_file = BufReader::new(file);
 
 
-    let mut measurements: HashMap<String, Measurement> = HashMap::new();
+    let mut measurements: BTreeMap<String, Measurement> = BTreeMap::new();
     
     // INPUT
     for line in buf_file.lines() {
@@ -58,7 +58,7 @@ fn main() {
     // OUTPUT
     println!("{{");
     for (name, measurement) in measurements {
-        println!("  {name}={:.01}/{:.01}/{:.01}", measurement.min, measurement.mean(), measurement.max);
+        println!("    {name}={:.01}/{:.01}/{:.01}", measurement.min, measurement.mean(), measurement.max);
     }
     println!("}}");
 }
