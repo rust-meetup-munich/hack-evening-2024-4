@@ -16,8 +16,9 @@ fn main() {
         .has_headers(false)
         .from_path(file)
         .unwrap();
-    for result in csv_reader.deserialize() {
-        let record: Record = result.unwrap();
+    let results: Vec<Record> = csv_reader.deserialize().map(|r| r.unwrap()).collect();
+    for result in results {
+        let record: Record = result;
         println!("{:?}", record);
     }
 }
