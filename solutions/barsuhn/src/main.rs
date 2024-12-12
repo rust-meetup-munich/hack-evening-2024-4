@@ -28,11 +28,17 @@ fn main() {
     keys.sort();
 
     println!("{}", '{');
+    let n = keys.len();
+    let mut c = 0_u32;
+
     for key in keys {
         let item = map.get(key).unwrap();
         let summary = item.summarize(key);
 
-        println!("    {},", summary);
+        c += 1;
+        if c != n {
+            println!("    {}", summary);
+        }
     }
     print!("{}", '}');
 }
