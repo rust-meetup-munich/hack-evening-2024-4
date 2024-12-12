@@ -47,7 +47,7 @@ fn main() {
         .collect();
     expected.sort();
     let expected_str = expected.join("\n");
-    let result = "{\n".to_string() + &expected_str + ",\n}";
+    let result = "{\n".to_string() + &expected_str + "\n}";
     println!("{result}");
 }
 struct Node {
