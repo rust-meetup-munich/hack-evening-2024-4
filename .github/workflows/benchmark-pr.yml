@@ -66,25 +66,25 @@ jobs:
             'cargo run --release -- ../../samples/weather_100K.csv'
         working-directory: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}
 
-      - name: post comment
-        run: |
-          # Read the test results
-          RESULTS=$(cat ${{ steps.determine_project.outputs.PROJECT_FOLDER }}/benchmark.md)
+      # - name: post comment
+      #   run: |
+      #     # Read the test results
+      #     RESULTS=$(cat ${{ steps.determine_project.outputs.PROJECT_FOLDER }}/benchmark.md)
 
-          # Print the results
-          echo "Results: $RESULTS"
+      #     # Print the results
+      #     echo "Results: $RESULTS"
 
-          GITSHA=$(git rev-parse HEAD)
+      #     GITSHA=$(git rev-parse HEAD)
 
-          echo "### Benchmark Preview at $GITSHA" > comment.md
-          echo "" >> comment.md
-          echo "$RESULTS" >> comment.md
-          echo "" >> comment.md
+      #     echo "### Benchmark Preview at $GITSHA" > comment.md
+      #     echo "" >> comment.md
+      #     echo "$RESULTS" >> comment.md
+      #     echo "" >> comment.md
 
-          # Post the comment to the PR
-          gh pr comment ${{ github.event.pull_request.number }} -F comment.md
-        env:
-          GH_TOKEN: ${{ github.token }}
+      #     # Post the comment to the PR
+      #     gh pr comment ${{ github.event.pull_request.number }} -F comment.md
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
 
       - name: benchmark-large
         run: |
@@ -92,22 +92,22 @@ jobs:
             "cargo run --release -- $HOME/samples/weather_1B.csv"
         working-directory: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}
 
-      - name: post comment large
-        run: |
-          # Read the test results
-          RESULTS=$(cat ${{ steps.determine_project.outputs.PROJECT_FOLDER }}/benchmark-large.md)
+      # - name: post comment large
+      #   run: |
+      #     # Read the test results
+      #     RESULTS=$(cat ${{ steps.determine_project.outputs.PROJECT_FOLDER }}/benchmark-large.md)
 
-          # Print the results
-          echo "Results: $RESULTS"
+      #     # Print the results
+      #     echo "Results: $RESULTS"
 
-          GITSHA=$(git rev-parse HEAD)
+      #     GITSHA=$(git rev-parse HEAD)
 
-          echo "### Benchmark for 1B at $GITSHA" > comment-2.md
-          echo "" >> comment-2.md
-          echo "$RESULTS" >> comment-2.md
-          echo "" >> comment-2.md
+      #     echo "### Benchmark for 1B at $GITSHA" > comment-2.md
+      #     echo "" >> comment-2.md
+      #     echo "$RESULTS" >> comment-2.md
+      #     echo "" >> comment-2.md
 
-          # Post the comment to the PR
-          gh pr comment ${{ github.event.pull_request.number }} -F comment-2.md
-        env:
-          GH_TOKEN: ${{ github.token }}
+      #     # Post the comment to the PR
+      #     gh pr comment ${{ github.event.pull_request.number }} -F comment-2.md
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
