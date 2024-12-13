@@ -9,7 +9,7 @@ concurrency:
 
 jobs:
   flamegraph:
-    if: ${{ github.event.label.name == 'flamegraph' }}
+    if: contains(github.event.pull_request.labels.*.name, 'flamegraph')
     name: flamegraph
     runs-on: ubuntu-latest
     timeout-minutes: 8
