@@ -3,10 +3,6 @@ on:
   pull_request:
   workflow_dispatch:
 
-defaults:
-  run:
-    shell: bash --noprofile --norc -CeEuxo pipefail {0}
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
@@ -15,8 +11,7 @@ jobs:
   flamegraph:
     if: ${{ github.event.label.name == 'flamegraph' }}
     name: flamegraph
-    runs-on:
-      group: Benchmark
+    runs-on: ubuntu-latest
     timeout-minutes: 8
 
     steps:
@@ -43,27 +38,22 @@ jobs:
           echo "PROJECT_FOLDER=$NEW_FOLDER" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ github.token }}
-      # - name: setup | rust
-      #   uses: dtolnay/rust-toolchain@stable
-      #   with:
-      #     default: true
-      #     profile: minimal
+      - name: setup | rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          default: true
+          profile: minimal
       - name: build
         run: cargo build --release
         working-directory: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}
 
       - name: generate flamegraph
         run: |
-          set
-          echo $0
-          cargo flamegraph --verbose --cmd "record -F 997 --call-graph dwarf,16384 -g -o /tmp/perf.data" -- ~/samples/weather_1M.csv
+          sudo cargo flamegraph --verbose --cmd "record -F 997 --call-graph dwarf,16384 -g -o /tmp/perf.data" -- ~/samples/weather_1M.csv
         shell: bash
         working-directory: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}
         env:
           CARGO_PROFILE_RELEASE_DEBUG: "true"
-
-      - name: setup up node with fnm
-        run: eval "$(fnm env)"
 
       - name: Archive flamegraph
         id: artifact-upload-step
