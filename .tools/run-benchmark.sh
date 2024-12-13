@@ -38,9 +38,15 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "Running the solution $NAME on the benchmark dataset"
+# get the package name from Cargo.toml
+PACKAGE_NAME=$(grep '^name =' Cargo.toml | sed -E 's/name = "(.*)"/\1/')
+
+# get the list of binaries for the current package
+BIN_NAME=$(cargo metadata --format-version 1 | jq -r --arg PACKAGE_NAME "$PACKAGE_NAME" '.packages[] | select(.name == $PACKAGE_NAME) | .targets[] | select(.kind[] == "bin") | .name')
+
+echo "Running the solution $BIN_NAME on the benchmark dataset"
 
 hyperfine --warmup 0 --runs 5 \
     --export-json $RESULTS_FOLDER/$NAME.json \
     --show-output \
-    "cargo run --release -- $BENCHMARK_DATASET"
+    "target/release/$BIN_NAME $BENCHMARK_DATASET"

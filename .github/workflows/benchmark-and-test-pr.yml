@@ -1,4 +1,4 @@
-name: Benchmark PR
+name: Benchmark+Test PR
 on:
   pull_request:
   workflow_dispatch:
@@ -12,10 +12,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  benchmark:
+  test:
     name: test
-    runs-on:
-      group: Benchmark
+    runs-on: ubuntu-latest
     timeout-minutes: 8
 
     steps:
@@ -56,6 +55,42 @@ jobs:
           # Check if the results are correct
           diff -w X ../../samples/expected/weather_100.txt
 
+        working-directory: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}
+
+  benchmark:
+    name: benchmark
+    runs-on:
+      group: Benchmark
+    timeout-minutes: 8
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: determine the new added project
+        id: determine_project
+        run: |
+          # Get the name of the main branch (assuming it's 'main')
+          MAIN_BRANCH="main"
+
+          # Fetch the main branch
+          git fetch origin $MAIN_BRANCH:$MAIN_BRANCH
+
+          NEW_FOLDER=$(git diff --name-status $MAIN_BRANCH | grep -E '^[AM]' | awk '{print $2}' | grep 'Cargo.toml' | awk -F/ '{printf("%s/%s\n", $1, $2)}' | uniq)
+
+          # Extract the names of new folders
+          if [[ -z "$NEW_FOLDER" ]]; then
+            echo "No new project found - skipping the build"
+            gh run cancel ${{ github.run_id }}
+            gh run watch ${{ github.run_id }}
+          fi
+
+          # Set the output variable
+          echo "PROJECT_FOLDER=$NEW_FOLDER" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: build
+        run: cargo build --release
         working-directory: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}
 
       - name: benchmark
