@@ -60,7 +60,7 @@ jobs:
 
       - name: rename the flamegraph to gitsha and run.id
         run: |
-          mkdir guide/book/.flamegraphs
+          mkdir -p guide/book/.flamegraphs
           mv ${{ steps.determine_project.outputs.PROJECT_FOLDER }}/flamegraph.svg guide/book/.flamegraphs/flamegraph-${{ github.sha }}-${{ github.run_id }}.svg
         shell: bash
 
