@@ -58,17 +58,24 @@ jobs:
         env:
           CARGO_PROFILE_RELEASE_DEBUG: "true"
 
-      - name: Archive flamegraph
-        id: artifact-upload-step
-        uses: actions/upload-artifact@v4
+      - name: rename the flamegraph to gitsha and run.id
+        run: |
+          mkdir guide/book/.flamegraphs
+          mv ${{ steps.determine_project.outputs.PROJECT_FOLDER }}/flamegraph.svg guide/book/.flamegraphs/flamegraph-${{ github.sha }}-${{ github.run_id }}.svg
+        shell: bash
+
+      - name: Store flamegraph
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          name: flamegraph.svg
-          path: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}/flamegraph.svg
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./guide/book
+          keep_files: true
 
       - name: post comment
         run: |
           # link of the just uploaded artefact
-          LINK='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}'
+          LINK='https://rust-munich-meetup.github.io/hack-evening-2024-4/.flamegraphs/flamegraph-${{ github.sha }}-${{ github.run_id }}.svg'
 
           GITSHA=$(git rev-parse HEAD)
 
