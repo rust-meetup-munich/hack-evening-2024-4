@@ -52,7 +52,7 @@ jobs:
 
       - name: generate flamegraph
         run: |
-          cargo flamegraph --root --verbose --cmd "record -F 997 --call-graph dwarf,16384 -g -o /tmp/perf.data" -- ~/samples/weather_1M.csv
+          cargo flamegraph --root --verbose --cmd "record -F 997 --call-graph dwarf,16384 -g -o /tmp/perf.data" -- ../../samples/weather_1M.csv
         shell: bash
         working-directory: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}
         env:
