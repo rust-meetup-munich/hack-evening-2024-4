@@ -60,8 +60,8 @@ jobs:
 
       - name: rename the flamegraph to gitsha and run.id
         run: |
-          mkdir -p guide/book/.flamegraphs
-          mv ${{ steps.determine_project.outputs.PROJECT_FOLDER }}/flamegraph.svg guide/book/.flamegraphs/flamegraph-${{ github.sha }}-${{ github.run_id }}.svg
+          mkdir -p guide/book/_flamegraphs
+          mv ${{ steps.determine_project.outputs.PROJECT_FOLDER }}/flamegraph.svg guide/book/_flamegraphs/flamegraph-${{ github.sha }}-${{ github.run_id }}.svg
         shell: bash
 
       - name: Store flamegraph
@@ -75,7 +75,7 @@ jobs:
       - name: post comment
         run: |
           # link of the just uploaded artefact
-          LINK='https://rust-munich-meetup.github.io/hack-evening-2024-4/.flamegraphs/flamegraph-${{ github.sha }}-${{ github.run_id }}.svg'
+          LINK='https://rust-munich-meetup.github.io/hack-evening-2024-4/_flamegraphs/flamegraph-${{ github.sha }}-${{ github.run_id }}.svg'
 
           GITSHA=$(git rev-parse HEAD)
 
