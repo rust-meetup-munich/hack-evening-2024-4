@@ -74,7 +74,7 @@ jobs:
       - name: post comment
         run: |
           # link of the just uploaded artefact
-          LINK='https://rust-meetup-meetup.github.io/hack-evening-2024-4/_flamegraphs/flamegraph-${{ github.sha }}-${{ github.run_id }}.svg'
+          LINK='https://rust-meetup-munich.github.io/hack-evening-2024-4/_flamegraphs/flamegraph-${{ github.sha }}-${{ github.run_id }}.svg'
 
           GITSHA=$(git rev-parse HEAD)
 
