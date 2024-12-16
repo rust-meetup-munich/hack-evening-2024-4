@@ -48,11 +48,15 @@ jobs:
         working-directory: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}
 
       - name: install flamegraph
-        run: cargo install flamegraph
+        run: |
+          # cargo install flamegraph
+          # installs the fix for issue: https://github.com/flamegraph-rs/flamegraph/issues/248
+          cargo install --git https://github.com/flamegraph-rs/flamegraph --rev 5919bf77d309ebc2459f16c1742d06cba7d62078
 
       - name: generate flamegraph
         run: |
-          cargo flamegraph --root --verbose --cmd "record -F 997 --call-graph dwarf,16384 -g -o /tmp/perf.data" -- ../../samples/weather_1M.csv
+          # cargo flamegraph --root --verbose --cmd "record -F 997 --call-graph dwarf,16384 -g -o /tmp/perf.data" -- ../../samples/weather_1M.csv
+          cargo flamegraph --root --verbose -- ../../samples/weather_1M.csv
         shell: bash
         working-directory: ${{ steps.determine_project.outputs.PROJECT_FOLDER }}
         env:
