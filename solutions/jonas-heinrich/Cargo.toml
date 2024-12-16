@@ -1,0 +1,8 @@
+[package]
+name = "jonas-heinrich"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hashbrown = "0.15"
+num_cpus = "1.16"
